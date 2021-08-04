@@ -152,6 +152,21 @@ public class RNZendeskChat extends ReactContextBaseJavaModule {
         }
     }
 
+    private PreChatFormFieldStatus getPreChatOptionsValue(ReadableMap options, String key) {
+        if (!options.hasKey(key)) return PreChatFormFieldStatus.OPTIONAL;
+        switch (options.getString(key)) {
+            case "required": return PreChatFormFieldStatus.REQUIRED;
+            case "optional": return PreChatFormFieldStatus.OPTIONAL;
+            case "hidden": return PreChatFormFieldStatus.HIDDEN;
+            default: return PreChatFormFieldStatus.OPTIONAL;
+        }
+    }
+
+    private Boolean getChatOptionsValue(ReadableMap options, String key) {
+        if (!options.hasKey(key)) return true;
+        return options.getBoolean(key);
+    }
+
     @ReactMethod
     public void startChat(ReadableMap options) {
         Providers providers = Chat.INSTANCE.providers();
@@ -159,11 +174,32 @@ public class RNZendeskChat extends ReactContextBaseJavaModule {
         setVisitorInfo(options);
         setUserIdentity(options);
         String botName = options.getString("botName");
-        ChatConfiguration chatConfiguration = ChatConfiguration.builder()
-                .withAgentAvailabilityEnabled(true)
+        ChatConfiguration.Builder builder = ChatConfiguration.builder();
+        if (options.hasKey("chatOptions")) {
+            ReadableMap chatOptions = options.getMap("chatOptions");
+            builder = builder
+                .withPreChatFormEnabled(getChatOptionsValue(chatOptions, "showPreChatForm"))
+                .withTranscriptEnabled(getChatOptionsValue(chatOptions, "showChatTranscriptPrompt"))
+                .withOfflineFormEnabled(getChatOptionsValue(chatOptions, "showOfflineForm"))
+                .withAgentAvailabilityEnabled(getChatOptionsValue(chatOptions, "showAgentAvailability"));
+        } else {
+          builder = builder
+                .withPreChatFormEnabled(true)
+                .withTranscriptEnabled(true)
                 .withOfflineFormEnabled(true)
-                .build();
+                .withAgentAvailabilityEnabled(true);
+        }
 
+        if(options.hasKey("preChatOptions")) {
+            ReadableMap preChatOptions = options.getMap("preChatOptions");
+            builder = builder
+                .withNameFieldStatus(getPreChatOptionsValue(preChatOptions, "name"))
+                .withEmailFieldStatus(getPreChatOptionsValue(preChatOptions, "email"))
+                .withPhoneFieldStatus(getPreChatOptionsValue(preChatOptions, "phone"))
+                .withDepartmentFieldStatus(getPreChatOptionsValue(preChatOptions, "department"));
+        }
+
+        ChatConfiguration chatConfiguration = builder.build();
         Activity activity = getCurrentActivity();
         if (options.hasKey("chatOnly")) {
            MessagingActivity.builder()

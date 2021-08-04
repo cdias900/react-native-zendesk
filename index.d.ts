@@ -53,10 +53,10 @@ declare module 'react-native-zendesk-v2' {
      * https://developer.zendesk.com/embeddables/docs/chat-sdk-v-2-for-ios/customize_the_look#customizing-the-chat-experience
      */
     chatOptions?: {
-      showPreChatForm?:boolean
-      showChatTranscriptPrompt?:boolean
-      showOfflineForm?:boolean
-      showAgentAvailability?:boolean
+      showPreChatForm?: boolean
+      showChatTranscriptPrompt?: boolean
+      showOfflineForm?: boolean
+      showAgentAvailability?: boolean
     }
     /**
      * In case you have enabled pre chat forms, you can configure what fields to be required
@@ -64,18 +64,18 @@ declare module 'react-native-zendesk-v2' {
      * https://developer.zendesk.com/embeddables/docs/chat-sdk-v-2-for-ios/customize_the_look#configuring-a-pre-chat-form
      */
     preChatOptions?: {
-      name? : 'required' | 'optional' | 'hidden'
-      email? : 'required' | 'optional'| 'hidden'
-      phone? : 'required' | 'optional'| 'hidden'
-      department? : 'required' | 'optional'| 'hidden'
+      name?: 'required' | 'optional' | 'hidden'
+      email?: 'required' | 'optional' | 'hidden'
+      phone?: 'required' | 'optional' | 'hidden'
+      department?: 'required' | 'optional' | 'hidden'
     }
     /**
      * Configuration to set up bot name, image in chat
      */
     messagingOptions?: {
-      botName?:string
-      botAvatarName?:string
-      botAvatarUrl?:string
+      botName?: string
+      botAvatarName?: string
+      botAvatarUrl?: string
     }
     /**
      * If you wish to just initialize Chat SDK on start of a chat, set this to true
@@ -101,8 +101,8 @@ declare module 'react-native-zendesk-v2' {
      * Required if filterArticles is set to true, needs the type of filter and values to filter upon
      */
     filter?: {
-      type : 'category' | 'section' | 'label'
-      values : Array<string>
+      type: 'category' | 'section' | 'label'
+      values: Array<string>
     }
   }
 
